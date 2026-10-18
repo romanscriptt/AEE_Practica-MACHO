@@ -26,16 +26,12 @@ public class ApartadoE {
         "Sevilla"    // Código 8
     };
 
-    public static void ejecutar() {
+    public static void main(String[] args) {
         archivo = new File("FICHE.DAT");
 
         if (!archivo.exists() || archivo.length() == 0) {
             System.out.println("El archivo FICHE.DAT no existe o está vacío.");
             return;
-        }
-
-        for (int i = 0; i < contaProvincias.length; i++) {
-            contaProvincias[i] = 0;
         }
 
         int totalTrabajadores = 0;
@@ -55,19 +51,20 @@ public class ApartadoE {
                         contaProvincias[codProvincia]++;
                     } else {
                         System.err.println("Advertencia: Código de provincia inválido (" 
-                                + codProvincia + ") para el trabajador " + t.getNombre());
+                                + codProvincia + ") para " + t.getNombre());
                     }
 
                 } catch (EOFException e) {
-                    eof = true;
+                    eof = true; 
                 }
             }
 
         } catch (FileNotFoundException e) {
             System.err.println("Error: No se encontró el fichero FICHE.DAT.");
         } catch (IOException e) {
-            System.err.println("Error de lectura en el archivo: " + e.getMessage());
+            System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
         } finally {
+
             try {
                 if (dataEntrada != null) {
                     dataEntrada.close();
@@ -76,7 +73,7 @@ public class ApartadoE {
                     entrada.close();
                 }
             } catch (IOException e) {
-                System.err.println("Error al cerrar los flujos de datos: " + e.getMessage());
+                System.err.println("Error al cerrar los flujos de lectura: " + e.getMessage());
             }
         }
 
@@ -93,9 +90,8 @@ public class ApartadoE {
             }
 
             if (maxEmpleados > 0) {
-                System.out.println("Número máximo de empleados en una provincia: " + maxEmpleados);
-                System.out.println("Provincia(s) con mayor número de empleados:");
-                
+                System.out.println("Número máximo de empleados alcanzado: " + maxEmpleados);
+                System.out.println("Provincia(s) con mayor ocupación:");
                 for (int i = 1; i <= 8; i++) {
                     if (contaProvincias[i] == maxEmpleados) {
                         System.out.println(" - " + nombreProvincias[i] + " (" + maxEmpleados + " empleados)");
@@ -105,9 +101,8 @@ public class ApartadoE {
                 System.out.println("No se registraron empleados en provincias válidas.");
             }
         } else {
-            System.out.println("No se leyó ningún registro de trabajador en el fichero.");
+            System.out.println("No se procesaron registros de trabajadores.");
         }
-        
         System.out.println("========================================================================");
     }
 }
