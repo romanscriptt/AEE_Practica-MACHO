@@ -18,7 +18,7 @@ public class ApartadoB {
     private static FileInputStream fsalida; 
     private static DataInputStream dataSalida;
 
-    public static void ejecutar() {
+    public static void main(String[] args) {
         archivo = new File("FICHE.DAT");
 
         if (!archivo.exists() || archivo.length() == 0) {
@@ -66,7 +66,7 @@ public class ApartadoB {
                                     t.getNombre(), t.getDia(), t.getMes(), t.getAnio(), aniosAntiguedad);
                         }
                     } else {
-                        System.err.println("Advertencia: Se omitió un registro con fecha no válida para: " + t.getNombre());
+                        System.err.println("Advertencia: Se omitió un registro por fecha inválida: " + t.getNombre());
                     }
 
                 } catch (EOFException e) {
@@ -79,6 +79,7 @@ public class ApartadoB {
         } catch (IOException e) {
             System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
         } finally {
+
             try {
                 if (dataSalida != null) {
                     dataSalida.close();
@@ -98,7 +99,7 @@ public class ApartadoB {
             System.out.printf("Trabajadores con 10 o más años: %d%n", masDeDiezAnios);
             System.out.printf("Porcentaje sobre el total: %.2f%%%n", porcentaje);
         } else {
-            System.out.println("No se procesaron registros válidos en el archivo.");
+            System.out.println("No se procesaron registros válidos.");
         }
         System.out.println("========================================================================");
     }
