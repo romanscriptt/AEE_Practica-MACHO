@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  *
- * @author Antoio Muñoz Herrera
+ * @author Antonio Muñoz Herrera
  */
 public class ApartadoE {
     private static File archivo;
