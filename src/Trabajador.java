@@ -1,100 +1,35 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+
 /**
  *
  * @author Álvaro López De San Román
  */
-public class Trabajador {
+public class TrabajadorDAO {
 
-    private String nombre;
-    private char sexo;
-    private float salario;
-    private int anio;
-    private int mes;
-    private int dia;
-    private char tipoEmpleado;
-    private int provincia;
-
-    public Trabajador() {
+    public static void escribir(DataOutputStream data, Trabajador t) throws IOException {
+        data.writeUTF(t.getNombre());
+        data.writeChar(t.getSexo());
+        data.writeFloat(t.getSalario());
+        data.writeInt(t.getAnio());
+        data.writeInt(t.getMes());
+        data.writeInt(t.getDia());
+        data.writeChar(t.getTipoEmpleado());
+        data.writeInt(t.getProvincia());
     }
 
-    public Trabajador(String nombre, char sexo, float salario, int anio, int mes,
-                      int dia, char tipoEmpleado, int provincia) {
-        this.nombre = nombre;
-        this.sexo = sexo;
-        this.salario = salario;
-        this.anio = anio;
-        this.mes = mes;
-        this.dia = dia;
-        this.tipoEmpleado = tipoEmpleado;
-        this.provincia = provincia;
-    }
+    public static Trabajador leer(DataInputStream data) throws EOFException, IOException {
+        String nombre = data.readUTF();
+        char sexo = data.readChar();
+        float salario = data.readFloat();
+        int anio = data.readInt();
+        int mes = data.readInt();
+        int dia = data.readInt();
+        char tipoEmpleado = data.readChar();
+        int provincia = data.readInt();
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public char getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(char sexo) {
-        this.sexo = sexo;
-    }
-
-    public float getSalario() {
-        return salario;
-    }
-
-    public void setSalario(float salario) {
-        this.salario = salario;
-    }
-
-    public int getAnio() {
-        return anio;
-    }
-
-    public void setAnio(int anio) {
-        this.anio = anio;
-    }
-
-    public int getMes() {
-        return mes;
-    }
-
-    public void setMes(int mes) {
-        this.mes = mes;
-    }
-
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-    public char getTipoEmpleado() {
-        return tipoEmpleado;
-    }
-
-    public void setTipoEmpleado(char tipoEmpleado) {
-        this.tipoEmpleado = tipoEmpleado;
-    }
-
-    public int getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(int provincia) {
-        this.provincia = provincia;
-    }
-
-    @Override
-    public String toString() {
-        return nombre + " | Sexo: " + sexo + " | Salario: " + salario + "€ | Fecha: " 
-                + dia + "/" + mes + "/" + anio + " | Tipo: " + tipoEmpleado + " | Prov: " + provincia;
+        return new Trabajador(nombre, sexo, salario, anio, mes, dia, tipoEmpleado, provincia);
     }
 }
