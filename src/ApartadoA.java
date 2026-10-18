@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- *
- * @author Álvaro López De San Román
+ * 
+ * @author Álvaro López De San Román 
  */
 public class ApartadoA {
 
     public static void main(String[] args) {
+        ejecutar();
+    }
+
+    public static void ejecutar() {
         BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
         File archivo = new File("FICHE.DAT");
         FileOutputStream fsalida = null;
@@ -30,9 +34,11 @@ public class ApartadoA {
             dataSalida = new DataOutputStream(fsalida);
 
             do {
-                System.out.println("REGISTRO DE TRABAJADOR");
+                System.out.println("========================================================================");
+                System.out.println("                            REGISTRO DE TRABAJADOR");
+                System.out.println("========================================================================");
 
-                System.out.print("Nombre y apellidos (maximo 30 caracteres): ");
+                System.out.print("Nombre y apellidos (máximo 30 caracteres): ");
                 nombre = teclado.readLine();
                 if (nombre.length() > 30) {
                     nombre = nombre.substring(0, 30);
@@ -72,7 +78,7 @@ public class ApartadoA {
                 } while (dia < 1 || dia > maxDias);
 
                 do {
-                    System.out.print("Tipo de empleado (C: Comision, F: Fijo, D: A domicilio): ");
+                    System.out.print("Tipo de empleado (C: Comisión, F: Fijo, D: A domicilio): ");
                     respuesta = teclado.readLine().trim().toUpperCase();
                 } while (respuesta.isEmpty() || (respuesta.charAt(0) != 'C' && respuesta.charAt(0) != 'F' && respuesta.charAt(0) != 'D'));
                 tipoEmpleado = respuesta.charAt(0);
@@ -94,7 +100,7 @@ public class ApartadoA {
             } while (respuesta.equals("S"));
 
         } catch (NumberFormatException e) {
-            System.out.println("Error: Formato numerico incorrecto.");
+            System.out.println("Error: Formato numérico incorrecto.");
         } catch (IOException e) {
             System.out.println("Error de entrada/salida: " + e.getMessage());
         } finally {
