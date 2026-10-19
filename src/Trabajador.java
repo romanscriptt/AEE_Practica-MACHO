@@ -1,39 +1,38 @@
 /**
- *
- * @author Álvaro López De San Román
+ * @author Álvaro López De San Román / Antonio Muñoz Herrera
  */
 public class Trabajador {
 
-    private String nombre;
+    private String nombreApe;
     private char sexo;
-    private float salario;
-    private int anio;
-    private int mes;
-    private int dia;
-    private char tipoEmpleado;
-    private int provincia;
+    private double salario;
+    private short anoIngreso;
+    private byte mesIngreso;
+    private byte diaIngreso;
+    private TipoEmpleado tipoEmpleado;
+    private Provincia provincia;
 
     public Trabajador() {
     }
 
-    public Trabajador(String nombre, char sexo, float salario, int anio, int mes, 
-                      int dia, char tipoEmpleado, int provincia) {
-        this.nombre = nombre;
+    public Trabajador(String nombreApe, char sexo, double salario, short anoIngreso, 
+                      byte mesIngreso, byte diaIngreso, TipoEmpleado tipoEmpleado, Provincia provincia) {
+        this.nombreApe = nombreApe;
         this.sexo = sexo;
         this.salario = salario;
-        this.anio = anio;
-        this.mes = mes;
-        this.dia = dia;
+        this.anoIngreso = anoIngreso;
+        this.mesIngreso = mesIngreso;
+        this.diaIngreso = diaIngreso;
         this.tipoEmpleado = tipoEmpleado;
         this.provincia = provincia;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreApe() {
+        return nombreApe;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreApe(String nombreApe) {
+        this.nombreApe = nombreApe;
     }
 
     public char getSexo() {
@@ -44,57 +43,58 @@ public class Trabajador {
         this.sexo = sexo;
     }
 
-    public float getSalario() {
+    public double getSalario() {
         return salario;
     }
 
-    public void setSalario(float salario) {
+    public void setSalario(double salario) {
         this.salario = salario;
     }
 
-    public int getAnio() {
-        return anio;
+    public short getAnoIngreso() {
+        return anoIngreso;
     }
 
-    public void setAnio(int anio) {
-        this.anio = anio;
+    public void setAnoIngreso(short anoIngreso) {
+        this.anoIngreso = anoIngreso;
     }
 
-    public int getMes() {
-        return mes;
+    public byte getMesIngreso() {
+        return mesIngreso;
     }
 
-    public void setMes(int mes) {
-        this.mes = mes;
+    public void setMesIngreso(byte mesIngreso) {
+        this.mesIngreso = mesIngreso;
     }
 
-    public int getDia() {
-        return dia;
+    public byte getDiaIngreso() {
+        return diaIngreso;
     }
 
-    public void setDia(int dia) {
-        this.dia = dia;
+    public void setDiaIngreso(byte diaIngreso) {
+        this.diaIngreso = diaIngreso;
     }
 
-    public char getTipoEmpleado() {
+    public TipoEmpleado getTipoEmpleado() {
         return tipoEmpleado;
     }
 
-    public void setTipoEmpleado(char tipoEmpleado) {
+    public void setTipoEmpleado(TipoEmpleado tipoEmpleado) {
         this.tipoEmpleado = tipoEmpleado;
     }
 
-    public int getProvincia() {
+    public Provincia getProvincia() {
         return provincia;
     }
 
-    public void setProvincia(int provincia) {
+    public void setProvincia(Provincia provincia) {
         this.provincia = provincia;
     }
 
     @Override
     public String toString() {
-        return nombre + " | Sexo: " + sexo + " | Salario: " + salario + "€ | Fecha: " 
-                + dia + "/" + mes + "/" + anio + " | Tipo: " + tipoEmpleado + " | Prov: " + provincia;
+        return nombreApe + " | Sexo: " + sexo + " | Salario: " + salario + "€ | Fecha: " 
+                + diaIngreso + "/" + mesIngreso + "/" + anoIngreso + " | Tipo: " + tipoEmpleado 
+                + " | Prov: " + provincia;
     }
 }
