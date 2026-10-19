@@ -1,4 +1,5 @@
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,9 +41,8 @@ public class ApartadoCyD {
             dataEntrada = new DataInputStream(entrada);
 
             while (!TrabajadorDAO.ff()) {
-                Trabajador t = TrabajadorDAO.leer(dataEntrada);
-
-                if (t != null && !TrabajadorDAO.ff()) {
+                try {
+                    Trabajador t = TrabajadorDAO.leer(dataEntrada);
                     contador++;
 
                     double salarioBase = t.getSalario();
@@ -82,7 +82,6 @@ public class ApartadoCyD {
                     System.out.printf("%-3d | %-28s | Base: %8.2f€ | Trienios: %6.2f€ | Destino: %6.2f€ | Género: %6.2f€ | TOTAL: %8.2f€%n",
                             contador, t.getNombreApe(), salarioBase, trienios, compDestino, compGenero, sueldoTotal);
 
-
                     double sueldoRedondeado = Math.round(sueldoTotal * 100.0) / 100.0;
 
                     if (sueldoRedondeado > maxSueldo) {
@@ -92,6 +91,8 @@ public class ApartadoCyD {
                     } else if (sueldoRedondeado == maxSueldo) {
                         empleadosSueldoMaximo.add(t.getNombreApe()); 
                     }
+
+                } catch (EOFException e) {
                 }
             }
 
@@ -100,14 +101,9 @@ public class ApartadoCyD {
         } catch (IOException e) {
             System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
         } finally {
-
             try {
-                if (dataEntrada != null) {
-                    dataEntrada.close();
-                }
-                if (entrada != null) {
-                    entrada.close();
-                }
+                if (dataEntrada != null) dataEntrada.close();
+                if (entrada != null) entrada.close();
             } catch (IOException e) {
                 System.err.println("Error al cerrar los flujos de lectura: " + e.getMessage());
             }
