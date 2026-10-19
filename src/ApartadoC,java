@@ -57,7 +57,7 @@ public class ApartadoC {
         } catch (EOFException e) {
             System.out.println("=========================================================================================================");
             System.out.println("Procesamiento de sueldos finalizado correctamente. Total trabajadores analizados: " + contador);
-            System.out.println("=========================================================================================================\n");
+            System.out.println("=========================================================================================================");
         } catch (IOException e) {
             System.out.println("Error de lectura en el archivo: " + e.getMessage());
         }
