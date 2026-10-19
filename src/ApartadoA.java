@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 
- * @author Álvaro López De San Román 
+ * @author Álvaro López De San Román / Antonio Muñoz Herrera
  */
 public class ApartadoA {
 
@@ -17,12 +16,12 @@ public class ApartadoA {
         FileOutputStream fsalida = null;
         DataOutputStream dataSalida = null;
 
-        String nombre;
+        String nombreApe;
         String respuesta;
         char sexo;
-        char tipoEmpleado;
-        float salario;
-        int anio, mes, dia, provincia;
+        char tipoChar;
+        double salario;
+        int anio, mes, dia, numProvincia;
         Trabajador t;
 
         try {
@@ -36,11 +35,11 @@ public class ApartadoA {
 
                 do {
                     System.out.print("Nombre y apellidos (máximo 30 caracteres): ");
-                    nombre = teclado.readLine().trim();
-                    if (nombre.length() > 30) {
-                        nombre = nombre.substring(0, 30);
+                    nombreApe = teclado.readLine().trim();
+                    if (nombreApe.length() > 30) {
+                        nombreApe = nombreApe.substring(0, 30);
                     }
-                } while (nombre.isEmpty() || !nombre.matches("[a-zA-Z ]+"));
+                } while (nombreApe.isEmpty() || !nombreApe.matches("[a-zA-Z ]+"));
 
                 do {
                     System.out.print("Sexo (M/H): ");
@@ -51,7 +50,7 @@ public class ApartadoA {
                 do {
                     System.out.print("Salario base: ");
                     try {
-                        salario = Float.parseFloat(teclado.readLine().trim().replace(',', '.'));
+                        salario = Double.parseDouble(teclado.readLine().trim().replace(',', '.'));
                     } catch (NumberFormatException e) {
                         salario = -1;
                     }
@@ -99,19 +98,22 @@ public class ApartadoA {
                     System.out.print("Tipo de empleado (C: Comisión, F: Fijo, D: A domicilio): ");
                     respuesta = teclado.readLine().trim().toUpperCase();
                 } while (respuesta.isEmpty() || (respuesta.charAt(0) != 'C' && respuesta.charAt(0) != 'F' && respuesta.charAt(0) != 'D'));
-                tipoEmpleado = respuesta.charAt(0);
+                tipoChar = respuesta.charAt(0);
 
                 System.out.println("Provincias: 1-Almería, 2-Cádiz, 3-Córdoba, 4-Granada, 5-Huelva, 6-Jaén, 7-Málaga, 8-Sevilla");
                 do {
                     System.out.print("Provincia (1-8): ");
                     try {
-                        provincia = Integer.parseInt(teclado.readLine().trim());
+                        numProvincia = Integer.parseInt(teclado.readLine().trim());
                     } catch (NumberFormatException e) {
-                        provincia = -1;
+                        numProvincia = -1;
                     }
-                } while (provincia < 1 || provincia > 8);
+                } while (numProvincia < 1 || numProvincia > 8);
 
-                t = new Trabajador(nombre, sexo, salario, anio, mes, dia, tipoEmpleado, provincia);
+                TipoEmpleado tipoEnum = TipoEmpleado.fromCodigo(tipoChar);
+                Provincia provinciaEnum = Provincia.fromCodigo((byte) numProvincia);
+
+                t = new Trabajador(nombreApe, sexo, salario, (short) anio, (byte) mes, (byte) dia, tipoEnum, provinciaEnum);
                 TrabajadorDAO.escribir(dataSalida, t);
 
                 System.out.println("Trabajador guardado correctamente en FICHE.DAT");
