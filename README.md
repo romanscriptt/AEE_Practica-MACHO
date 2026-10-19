@@ -19,14 +19,14 @@ Proyecto realizado por Álvaro López de San Romám y Antonio Muñoz Herrera.
 
 ### Antonio Muñoz Herrera
 * Diagrama de Clases UML: Revisión y reestructuración de la estructura del diseño tras repasarlo junto con el compañero
-   *Tiempo estimado: 1 hora y 30 minutos
-   *Tiempo real invertido: 2 horas y 15 minutos
+   * Tiempo estimado: 1 hora y 30 minutos
+   * Tiempo real invertido: 2 horas y 15 minutos
 * ApartadoB.java: Obtención del listado de empleados que llevan 10 años o más en la empresa. Utilización de GregorianCalendar para el cálculo de las fechas y validación.
-   *Tiempo estimado: 2 horas
-   *Tiempo real: 3 horas
+   * Tiempo estimado: 2 horas
+   * Tiempo real: 3 horas
 * ApartadoD.java: Obtención del empleado con mayor salario
-   *Tiempo estimado: 1 hora
-   *Tiempo real:
-*ApartadoE.java: Obtención de la provincia con mayor población
-   *Tiempo estimado: 1 hora
-  Tiempo real: 2 horas
+   * Tiempo estimado: 1 hora
+   * Tiempo real:
+* ApartadoE.java: Obtención de la provincia con mayor población
+   * Tiempo estimado: 1 hora
+   * Tiempo real: 2 horas
