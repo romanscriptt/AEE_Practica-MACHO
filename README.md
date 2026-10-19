@@ -24,9 +24,9 @@ Proyecto realizado por Álvaro López de San Romám y Antonio Muñoz Herrera.
 * ApartadoB.java: Obtención del listado de empleados que llevan 10 años o más en la empresa. Utilización de GregorianCalendar para el cálculo de las fechas y validación.
    * Tiempo estimado: 2 horas
    * Tiempo real: 3 horas
-* ApartadoD.java: Obtención del empleado con mayor salario
-   * Tiempo estimado: 1 hora
-   * Tiempo real:
+* ApartadoD.java: Obtención del empleado con mayor salario y combinación con ApartadoC
+   * Tiempo estimado: 2 hora
+   * Tiempo real: 2 horas y 30 minutos
 * ApartadoE.java: Obtención de la provincia con mayor población
    * Tiempo estimado: 1 hora
    * Tiempo real: 2 horas
