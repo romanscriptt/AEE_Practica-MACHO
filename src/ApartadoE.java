@@ -35,27 +35,25 @@ public class ApartadoE {
         }
 
         int totalTrabajadores = 0;
-        boolean eof = false; 
 
         try {
             entrada = new FileInputStream(archivo);
             dataEntrada = new DataInputStream(entrada);
 
-            while (!eof) {
+            while (!TrabajadorDAO.ff()) {
                 try {
                     Trabajador t = TrabajadorDAO.leer(dataEntrada);
                     totalTrabajadores++;
 
-                    int codProvincia = t.getProvincia();
+                    int codProvincia = t.getProvincia().getCodigo();
                     if (codProvincia >= 1 && codProvincia <= 8) {
                         contaProvincias[codProvincia]++;
                     } else {
                         System.err.println("Advertencia: Código de provincia inválido (" 
-                                + codProvincia + ") para " + t.getNombre());
+                                + codProvincia + ") para " + t.getNombreApe());
                     }
 
                 } catch (EOFException e) {
-                    eof = true; 
                 }
             }
 
@@ -64,7 +62,6 @@ public class ApartadoE {
         } catch (IOException e) {
             System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
         } finally {
-
             try {
                 if (dataEntrada != null) {
                     dataEntrada.close();
