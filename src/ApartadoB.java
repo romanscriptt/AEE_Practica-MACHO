@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-
 /**
- *
- * @author Antonio Muñoz Herrera
+ * @author Álvaro López de San Román / Antonio Muñoz Herrera
  */
 public class ApartadoB {
 
@@ -48,9 +46,10 @@ public class ApartadoB {
                     Trabajador t = TrabajadorDAO.leer(dataSalida);
                     totalTrabajadores++;
 
-                    if (t.getAnio() > 1900 && t.getMes() >= 1 && t.getMes() <= 12 && t.getDia() >= 1 && t.getDia() <= 31) {
+                    if (t.getAnoIngreso() > 1900 && t.getMesIngreso() >= 1 && t.getMesIngreso() <= 12 
+                            && t.getDiaIngreso() >= 1 && t.getDiaIngreso() <= 31) {
                         
-                        Calendar fechaIngreso = new GregorianCalendar(t.getAnio(), t.getMes() - 1, t.getDia());
+                        Calendar fechaIngreso = new GregorianCalendar(t.getAnoIngreso(), t.getMesIngreso() - 1, t.getDiaIngreso());
 
                         int aniosAntiguedad = fechaActual.get(Calendar.YEAR) - fechaIngreso.get(Calendar.YEAR);
 
@@ -63,10 +62,10 @@ public class ApartadoB {
                         if (aniosAntiguedad >= 10) {
                             masDeDiezAnios++;
                             System.out.printf("%-30s | %02d/%02d/%04d    | %d años%n",
-                                    t.getNombre(), t.getDia(), t.getMes(), t.getAnio(), aniosAntiguedad);
+                                    t.getNombreApe(), t.getDiaIngreso(), t.getMesIngreso(), t.getAnoIngreso(), aniosAntiguedad);
                         }
                     } else {
-                        System.err.println("Advertencia: Se omitió un registro por fecha inválida: " + t.getNombre());
+                        System.err.println("Advertencia: Se omitió un registro por fecha inválida: " + t.getNombreApe());
                     }
 
                 } catch (EOFException e) {
@@ -79,14 +78,9 @@ public class ApartadoB {
         } catch (IOException e) {
             System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
         } finally {
-
             try {
-                if (dataSalida != null) {
-                    dataSalida.close();
-                }
-                if (fsalida != null) {
-                    fsalida.close();
-                }
+                if (dataSalida != null) dataSalida.close();
+                if (fsalida != null) fsalida.close();
             } catch (IOException e) {
                 System.err.println("Error al cerrar los flujos de lectura: " + e.getMessage());
             }
