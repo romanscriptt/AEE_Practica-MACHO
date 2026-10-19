@@ -4,32 +4,46 @@ import java.io.EOFException;
 import java.io.IOException;
 
 /**
- *
- * @author Álvaro López De San Román
+ * @author Álvaro López De San Román / Antonio Muñoz Herrera
  */
 public class TrabajadorDAO {
 
+    private static boolean esFinFichero = false;
+
+    public static boolean ff() {
+        return esFinFichero;
+    }
+
     public static void escribir(DataOutputStream data, Trabajador t) throws IOException {
-        data.writeUTF(t.getNombre());
+        data.writeUTF(t.getNombreApe());
         data.writeChar(t.getSexo());
-        data.writeFloat(t.getSalario());
-        data.writeInt(t.getAnio());
-        data.writeInt(t.getMes());
-        data.writeInt(t.getDia());
-        data.writeChar(t.getTipoEmpleado());
-        data.writeInt(t.getProvincia());
+        data.writeDouble(t.getSalario());
+        data.writeShort(t.getAnoIngreso());
+        data.writeByte(t.getMesIngreso());
+        data.writeByte(t.getDiaIngreso());
+        data.writeChar(t.getTipoEmpleado().getCodigo());
+        data.writeByte(t.getProvincia().getCodigo());
     }
 
     public static Trabajador leer(DataInputStream data) throws EOFException, IOException {
-        String nombre = data.readUTF();
-        char sexo = data.readChar();
-        float salario = data.readFloat();
-        int anio = data.readInt();
-        int mes = data.readInt();
-        int dia = data.readInt();
-        char tipoEmpleado = data.readChar();
-        int provincia = data.readInt();
+        try {
+            String nombreApe = data.readUTF();
+            char sexo = data.readChar();
+            double salario = data.readDouble();
+            short anoIngreso = data.readShort();
+            byte mesIngreso = data.readByte();
+            byte diaIngreso = data.readByte();
+            char codTipo = data.readChar();
+            byte codProv = data.readByte();
 
-        return new Trabajador(nombre, sexo, salario, anio, mes, dia, tipoEmpleado, provincia);
+            TipoEmpleado tipoEmpleado = TipoEmpleado.fromCodigo(codTipo);
+            Provincia provincia = Provincia.fromCodigo(codProv);
+
+            esFinFichero = false;
+            return new Trabajador(nombreApe, sexo, salario, anoIngreso, mesIngreso, diaIngreso, tipoEmpleado, provincia);
+        } catch (EOFException e) {
+            esFinFichero = true;
+            throw e;
+        }
     }
 }
