@@ -45,11 +45,20 @@ public class ApartadoC {
                     compDestino = salarioBase * 0.10;
                 }
 
-                // Complemento Género: 120€ si es hombre ('H')
+                // Complemento "Por la cara" Género: 120€ si es hombre ('H')
                 double compGenero = (Character.toUpperCase(t.getSexo()) == 'H') ? 120.0 : 0.0;
 
                 double sueldoTotal = salarioBase + trienios + compDestino + compGenero;
-              }
-          } catch 
-}
 
+                System.out.printf("%-3d | %-28s | Base: %8.2f€ | Trienios: %6.2f€ | Destino: %6.2f€ | Género: %6.2f€ | TOTAL: %8.2f€%n",
+                        contador, t.getNombre(), salarioBase, trienios, compDestino, compGenero, sueldoTotal);
+            }
+
+        } catch (EOFException e) {
+            System.out.println("=========================================================================================================");
+            System.out.println("Procesamiento de sueldos finalizado correctamente. Total trabajadores analizados: " + contador);
+            System.out.println("=========================================================================================================\n");
+        } catch (IOException e) {
+            System.out.println("Error de lectura en el archivo: " + e.getMessage());
+        }
+    }
