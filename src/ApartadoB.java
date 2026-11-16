@@ -1,100 +1,75 @@
+
+import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.io.InputStreamReader;
 
 /**
- * @author Álvaro López de San Román / Antonio Muñoz Herrera
+ *
+ * @author Álvaro López De San Román
  */
+
 public class ApartadoB {
 
-    private static File archivo;
-    private static FileInputStream fsalida; 
-    private static DataInputStream dataSalida;
+    private static final int ANIOS_MINIMOS = 10;
+    private static final int LINEAS_POR_PAGINA = 5;
 
     public static void main(String[] args) {
-        archivo = new File("FICHE.DAT");
 
-        if (!archivo.exists() || archivo.length() == 0) {
-            System.out.println("El archivo FICHE.DAT no existe o está vacío.");
-            return;
-        }
+        BufferedReader teclado;
+        File fichero;
+        Trabajador trabajador;
+        int totalTrabajadores;
+        int totalAntiguos;
+        int lineasEnPagina;
+        int numeroPagina;
+        double porcentaje;
 
-        int totalTrabajadores = 0;
-        int masDeDiezAnios = 0;
+        teclado = new BufferedReader(new InputStreamReader(System.in));
+        fichero = TrabajadorDAO.getFichero();
 
-        Calendar fechaActual = Calendar.getInstance();
-
-        System.out.println("========================================================================");
-        System.out.println("     LISTADO DE EMPLEADOS CON 10 O MÁS AÑOS DE ANTIGÜEDAD EN MACHO S.A.");
-        System.out.println("========================================================================");
-        System.out.printf("%-30s | %-12s | %-10s%n", "NOMBRE Y APELLIDOS", "FECHA INGRESO", "ANTIGÜEDAD");
-        System.out.println("------------------------------------------------------------------------");
-
-        try {
-            fsalida = new FileInputStream(archivo);
-            dataSalida = new DataInputStream(fsalida);
-
-            boolean eof = false; 
-
-            while (!eof) {
-                try {
-                    Trabajador t = TrabajadorDAO.leer(dataSalida);
-                    totalTrabajadores++;
-
-                    if (t.getAnoIngreso() > 1900 && t.getMesIngreso() >= 1 && t.getMesIngreso() <= 12 
-                            && t.getDiaIngreso() >= 1 && t.getDiaIngreso() <= 31) {
-                        
-                        Calendar fechaIngreso = new GregorianCalendar(t.getAnoIngreso(), t.getMesIngreso() - 1, t.getDiaIngreso());
-
-                        int aniosAntiguedad = fechaActual.get(Calendar.YEAR) - fechaIngreso.get(Calendar.YEAR);
-
-                        if (fechaActual.get(Calendar.MONTH) < fechaIngreso.get(Calendar.MONTH) || 
-                           (fechaActual.get(Calendar.MONTH) == fechaIngreso.get(Calendar.MONTH) && 
-                            fechaActual.get(Calendar.DAY_OF_MONTH) < fechaIngreso.get(Calendar.DAY_OF_MONTH))) {
-                            aniosAntiguedad--;
-                        }
-
-                        if (aniosAntiguedad >= 10) {
-                            masDeDiezAnios++;
-                            System.out.printf("%-30s | %02d/%02d/%04d    | %d años%n",
-                                    t.getNombreApe(), t.getDiaIngreso(), t.getMesIngreso(), t.getAnoIngreso(), aniosAntiguedad);
-                        }
-                    } else {
-                        System.err.println("Advertencia: Se omitió un registro por fecha inválida: " + t.getNombreApe());
-                    }
-
-                } catch (EOFException e) {
-                    eof = true;
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: No se encontró el fichero FICHE.DAT.");
-        } catch (IOException e) {
-            System.err.println("Error de lectura al procesar el archivo: " + e.getMessage());
-        } finally {
-            try {
-                if (dataSalida != null) dataSalida.close();
-                if (fsalida != null) fsalida.close();
-            } catch (IOException e) {
-                System.err.println("Error al cerrar los flujos de lectura: " + e.getMessage());
-            }
-        }
-
-        System.out.println("========================================================================");
-        if (totalTrabajadores > 0) {
-            double porcentaje = ((double) masDeDiezAnios / totalTrabajadores) * 100;
-            System.out.printf("Total trabajadores analizados: %d%n", totalTrabajadores);
-            System.out.printf("Trabajadores con 10 o más años: %d%n", masDeDiezAnios);
-            System.out.printf("Porcentaje sobre el total: %.2f%%%n", porcentaje);
+        if (!fichero.exists() || fichero.length() == 0) {
+            System.out.println("El fichero " + fichero.getPath() + " no existe o está vacío.");
         } else {
-            System.out.println("No se procesaron registros válidos.");
+            totalTrabajadores = 0;
+            totalAntiguos = 0;
+            lineasEnPagina = 0;
+            numeroPagina = 1;
+
+            try (DataInputStream entrada = new DataInputStream(new FileInputStream(fichero))) {
+                System.out.println("EMPLEADOS CON " + ANIOS_MINIMOS + " O MÁS AÑOS EN MACHO S.A.");
+                System.out.println("--- Página " + numeroPagina + " ---");
+
+                while ((trabajador = TrabajadorDAO.leer(entrada)) != null) {
+                    totalTrabajadores++;
+                    if (trabajador.getAntiguedad() >= ANIOS_MINIMOS) {
+                        totalAntiguos++;
+                        if (lineasEnPagina == LINEAS_POR_PAGINA) {
+                            System.out.println("--- Pulse Enter para ver la página siguiente ---");
+                            teclado.readLine();
+                            numeroPagina++;
+                            lineasEnPagina = 0;
+                            System.out.println("--- Página " + numeroPagina + " ---");
+                        }
+                        System.out.printf("%-30s | Ingreso: %s | %d años%n",
+                                trabajador.getNombreApellidos(), trabajador.getFechaIngreso(),
+                                trabajador.getAntiguedad());
+                        lineasEnPagina++;
+                    }
+                }
+
+                System.out.println("Trabajadores en la empresa: " + totalTrabajadores);
+                System.out.println("Con " + ANIOS_MINIMOS + " o más años: " + totalAntiguos);
+                porcentaje = totalAntiguos * 100.0 / totalTrabajadores;
+                System.out.printf("Porcentaje sobre el total: %.2f %%%n", porcentaje);
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Fichero con datos incorrectos: " + e.getMessage());
+            }
         }
-        System.out.println("========================================================================");
     }
 }
