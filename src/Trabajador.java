@@ -1,100 +1,77 @@
+
 /**
- * @author Álvaro López De San Román / Antonio Muñoz Herrera
+ *
+ * @author Álvaro López De San Román
  */
 public class Trabajador {
 
-    private String nombreApe;
-    private char sexo;
+    private static final int ANIOS_TRIENIO = 3;
+    private static final double EUROS_TRIENIO = 24.0;
+    private static final double PORCENTAJE_DESTINO = 0.10;
+    private static final double EXTRA_HOMBRE = 120.0;
+
+    private String nombreApellidos;
+    private Sexo sexo;
     private double salario;
-    private short anoIngreso;
-    private byte mesIngreso;
-    private byte diaIngreso;
+    private Fecha fechaIngreso;
     private TipoEmpleado tipoEmpleado;
     private Provincia provincia;
 
-    public Trabajador() {
-    }
-
-    public Trabajador(String nombreApe, char sexo, double salario, short anoIngreso, 
-                      byte mesIngreso, byte diaIngreso, TipoEmpleado tipoEmpleado, Provincia provincia) {
-        this.nombreApe = nombreApe;
+    public Trabajador(String nombreApellidos, Sexo sexo, double salario, Fecha fechaIngreso, TipoEmpleado tipoEmpleado, Provincia provincia) {
+        this.nombreApellidos = nombreApellidos;
         this.sexo = sexo;
         this.salario = salario;
-        this.anoIngreso = anoIngreso;
-        this.mesIngreso = mesIngreso;
-        this.diaIngreso = diaIngreso;
+        this.fechaIngreso = fechaIngreso;
         this.tipoEmpleado = tipoEmpleado;
         this.provincia = provincia;
     }
 
-    public String getNombreApe() {
-        return nombreApe;
+    public String getNombreApellidos() {
+        return this.nombreApellidos;
     }
 
-    public void setNombreApe(String nombreApe) {
-        this.nombreApe = nombreApe;
-    }
-
-    public char getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(char sexo) {
-        this.sexo = sexo;
+    public Sexo getSexo() {
+        return this.sexo;
     }
 
     public double getSalario() {
-        return salario;
+        return this.salario;
     }
 
-    public void setSalario(double salario) {
-        this.salario = salario;
-    }
-
-    public short getAnoIngreso() {
-        return anoIngreso;
-    }
-
-    public void setAnoIngreso(short anoIngreso) {
-        this.anoIngreso = anoIngreso;
-    }
-
-    public byte getMesIngreso() {
-        return mesIngreso;
-    }
-
-    public void setMesIngreso(byte mesIngreso) {
-        this.mesIngreso = mesIngreso;
-    }
-
-    public byte getDiaIngreso() {
-        return diaIngreso;
-    }
-
-    public void setDiaIngreso(byte diaIngreso) {
-        this.diaIngreso = diaIngreso;
+    public Fecha getFechaIngreso() {
+        return this.fechaIngreso;
     }
 
     public TipoEmpleado getTipoEmpleado() {
-        return tipoEmpleado;
-    }
-
-    public void setTipoEmpleado(TipoEmpleado tipoEmpleado) {
-        this.tipoEmpleado = tipoEmpleado;
+        return this.tipoEmpleado;
     }
 
     public Provincia getProvincia() {
-        return provincia;
+        return this.provincia;
     }
 
-    public void setProvincia(Provincia provincia) {
-        this.provincia = provincia;
+    public int getAntiguedad() {
+        return this.fechaIngreso.aniosHasta(Fecha.hoy());
+    }
+
+    
+    public double getSueldo() {
+        double sueldo;
+
+        sueldo = this.salario;
+        sueldo = sueldo + (this.getAntiguedad() / ANIOS_TRIENIO) * EUROS_TRIENIO;
+        if (this.provincia == Provincia.JAEN || this.provincia == Provincia.HUELVA
+                || this.provincia == Provincia.ALMERIA) {
+            sueldo = sueldo + this.salario * PORCENTAJE_DESTINO;
+        }
+        if (this.sexo == Sexo.H) {
+            sueldo = sueldo + EXTRA_HOMBRE;
+        }
+        return Math.round(sueldo * 100) / 100.0;
     }
 
     @Override
     public String toString() {
-        return nombreApe + " | Sexo: " + sexo + " | Salario: " + salario + "€ | Fecha: " 
-                + diaIngreso + "/" + mesIngreso + "/" + anoIngreso + " | Tipo: " + tipoEmpleado 
-                + " | Prov: " + provincia;
+        return this.nombreApellidos + " | Sexo: " + this.sexo.getDescripcion() + " | Salario: " + this.salario + "€" + " | Ingreso: " + this.fechaIngreso + " | Tipo: " + this.tipoEmpleado.getDescripcion() + " | Provincia: " + this.provincia.getNombre();
     }
 }
