@@ -1,3 +1,64 @@
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+/**
+ *
+ * @author Álvaro López De San Román y Antonio Muñoz Herrera
+ */
 public class ApartadoC {
-    
-}
+
+    public static void main(String[] args) {
+        ejecutar();
+    }
+
+    public static void ejecutar() {
+        File archivo = new File("FICHE.DAT");
+
+        if (!archivo.exists() || archivo.length() == 0) {
+            System.out.println("El archivo FICHE.DAT no existe o está vacío.");
+            return;
+        }
+
+        System.out.println("=========================================================================================================");
+        System.out.println("                               LISTADO DE SUELDOS TOTALES EN MACHO S.A.");
+        System.out.println("=========================================================================================================");
+
+        int contador = 0;
+
+        try (DataInputStream data = new DataInputStream(new FileInputStream(archivo))) {
+
+            while (true) {
+                Trabajador t = TrabajadorDAO.leer(data);
+                contador++;
+
+                float salarioBase = t.getSalario();
+                int antiguedad = 2026 - t.getAnio();
+                double trienios = (antiguedad / 3) * 24.0;
+
+                // Complemento Destino: 10% del sueldo base si es Almería (1), Huelva (5) o Jaén (6)
+                double compDestino = 0.0;
+                int prov = t.getProvincia();
+                if (prov == 1 || prov == 5 || prov == 6) {
+                    compDestino = salarioBase * 0.10;
+                }
+
+                // Complemento "Por la cara" Género: 120€ si es hombre ('H')
+                double compGenero = (Character.toUpperCase(t.getSexo()) == 'H') ? 120.0 : 0.0;
+
+                double sueldoTotal = salarioBase + trienios + compDestino + compGenero;
+
+                System.out.printf("%-3d | %-28s | Base: %8.2f€ | Trienios: %6.2f€ | Destino: %6.2f€ | Género: %6.2f€ | TOTAL: %8.2f€%n",
+                        contador, t.getNombre(), salarioBase, trienios, compDestino, compGenero, sueldoTotal);
+            }
+
+        } catch (EOFException e) {
+            System.out.println("=========================================================================================================");
+            System.out.println("Procesamiento de sueldos finalizado correctamente. Total trabajadores analizados: " + contador);
+            System.out.println("=========================================================================================================");
+        } catch (IOException e) {
+            System.out.println("Error de lectura en el archivo: " + e.getMessage());
+        }
+    }
