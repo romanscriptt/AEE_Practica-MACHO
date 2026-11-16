@@ -1,101 +1,77 @@
+
 /**
  *
  * @author Álvaro López De San Román
  */
-
 public class Trabajador {
 
-    private String nombre;
-    private char sexo;
-    private float salario;
-    private int anio;
-    private int mes;
-    private int dia;
-    private char tipoEmpleado;
-    private int provincia;
+    private static final int ANIOS_TRIENIO = 3;
+    private static final double EUROS_TRIENIO = 24.0;
+    private static final double PORCENTAJE_DESTINO = 0.10;
+    private static final double EXTRA_HOMBRE = 120.0;
 
-    public Trabajador() {
-    }
+    private String nombreApellidos;
+    private Sexo sexo;
+    private double salario;
+    private Fecha fechaIngreso;
+    private TipoEmpleado tipoEmpleado;
+    private Provincia provincia;
 
-    public Trabajador(String nombre, char sexo, float salario, int anio, int mes, 
-                      int dia, char tipoEmpleado, int provincia) {
-        this.nombre = nombre;
+    public Trabajador(String nombreApellidos, Sexo sexo, double salario, Fecha fechaIngreso, TipoEmpleado tipoEmpleado, Provincia provincia) {
+        this.nombreApellidos = nombreApellidos;
         this.sexo = sexo;
         this.salario = salario;
-        this.anio = anio;
-        this.mes = mes;
-        this.dia = dia;
+        this.fechaIngreso = fechaIngreso;
         this.tipoEmpleado = tipoEmpleado;
         this.provincia = provincia;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreApellidos() {
+        return this.nombreApellidos;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public Sexo getSexo() {
+        return this.sexo;
     }
 
-    public char getSexo() {
-        return sexo;
+    public double getSalario() {
+        return this.salario;
     }
 
-    public void setSexo(char sexo) {
-        this.sexo = sexo;
+    public Fecha getFechaIngreso() {
+        return this.fechaIngreso;
     }
 
-    public float getSalario() {
-        return salario;
+    public TipoEmpleado getTipoEmpleado() {
+        return this.tipoEmpleado;
     }
 
-    public void setSalario(float salario) {
-        this.salario = salario;
+    public Provincia getProvincia() {
+        return this.provincia;
     }
 
-    public int getAnio() {
-        return anio;
+    public int getAntiguedad() {
+        return this.fechaIngreso.aniosHasta(Fecha.hoy());
     }
 
-    public void setAnio(int anio) {
-        this.anio = anio;
-    }
+    
+    public double getSueldo() {
+        double sueldo;
 
-    public int getMes() {
-        return mes;
-    }
-
-    public void setMes(int mes) {
-        this.mes = mes;
-    }
-
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-    public char getTipoEmpleado() {
-        return tipoEmpleado;
-    }
-
-    public void setTipoEmpleado(char tipoEmpleado) {
-        this.tipoEmpleado = tipoEmpleado;
-    }
-
-    public int getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(int provincia) {
-        this.provincia = provincia;
+        sueldo = this.salario;
+        sueldo = sueldo + (this.getAntiguedad() / ANIOS_TRIENIO) * EUROS_TRIENIO;
+        if (this.provincia == Provincia.JAEN || this.provincia == Provincia.HUELVA
+                || this.provincia == Provincia.ALMERIA) {
+            sueldo = sueldo + this.salario * PORCENTAJE_DESTINO;
+        }
+        if (this.sexo == Sexo.H) {
+            sueldo = sueldo + EXTRA_HOMBRE;
+        }
+        return Math.round(sueldo * 100) / 100.0;
     }
 
     @Override
     public String toString() {
-        return nombre + " | Sexo: " + sexo + " | Salario: " + salario + "€ | Fecha: " 
-                + dia + "/" + mes + "/" + anio + " | Tipo: " + tipoEmpleado + " | Prov: " + provincia;
+        return this.nombreApellidos + " | Sexo: " + this.sexo.getDescripcion() + " | Salario: " + this.salario + "€" + " | Ingreso: " + this.fechaIngreso + " | Tipo: " + this.tipoEmpleado.getDescripcion() + " | Provincia: " + this.provincia.getNombre();
     }
 }
